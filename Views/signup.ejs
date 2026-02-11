@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./partials/head') %>
+        <title>Signup</title>
+</head>
+
+<body>
+    <%- include('./partials/navbar') %>
+        <% if (err) { %>
+            <div class="alert alert-danger m-3" role="alert">
+                <%= err %>
+            </div>
+        <% } %>
+        <div class="container mt-3 ">
+            <h1>Signup Page</h1>
+            <div class="row cols-8 mt-3 offset-1">
+                <form action="/user/signup" method="POST">
+                    <div class="mb-3  mt-3">
+                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+                        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputFullName" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="exampleInputFullName" name="fullname">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="genderSelect" class="form-label">Gender</label>
+                        <select class="form-select" id="genderSelect" name="gender" required>
+                            <option value="" selected disabled>Select your gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+
+        </div>
+        <%- include('./partials/script') %>
+</body>
+
+</html>

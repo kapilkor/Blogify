@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./partials/head') %>
+    <title>Blog</title>
+</head>
+
+<body>
+    <%- include('./partials/navbar') %>
+
+    <div class="container mt-4">
+        <h1>Create New Blog Post</h1>
+
+        <% if (typeof err !== 'undefined' && err) { %>
+            <div class="alert alert-danger" role="alert">
+                <%= err %>
+            </div>
+        <% } %>
+
+        <form action="/blog" method="POST" enctype="multipart/form-data">
+
+            <!-- Title -->
+            <div class="form-floating mb-3">
+                <input 
+                    type="text" 
+                    name="title"
+                    class="form-control" 
+                    id="titleInput" 
+                    placeholder="Blog Title"
+                    required>
+                <label for="titleInput">Blog Title</label>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input 
+                    type="file" 
+                    name="coverImage"
+                    class="form-control" 
+                    id="coverImageInput"
+                    required>
+                <label for="coverImageInput"></label>
+            </div>
+
+            <!-- Content -->
+            <div class="mb-3">
+                <textarea 
+                    name="content"
+                    class="form-control"
+                    placeholder="Blog Content"
+                    rows="4"
+                    required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <%- include('./partials/script') %>
+</body>
+</html>

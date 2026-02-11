@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./partials/head') %>
+    <title>404 - Page Not Found</title>
+    <style>
+        .error-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .error-code {
+            font-size: 120px;
+            font-weight: bold;
+            color: #6c757d;
+            line-height: 1;
+        }
+        .error-message {
+            font-size: 24px;
+            color: #495057;
+            margin: 20px 0;
+        }
+        .error-description {
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('./partials/navbar') %>
+    
+    <div class="container">
+        <div class="error-container">
+            <div>
+                <div class="error-code">404</div>
+                <h2 class="error-message">Page Not Found</h2>
+                <p class="error-description">
+                    Oops! The page you are looking for doesn't exist or has been moved.
+                </p>
+                <div>
+                    <a href="/" class="btn btn-primary btn-lg me-2">Go to Home</a>
+                    <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg">Go Back</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('./partials/script') %>
+</body>
+
+</html>

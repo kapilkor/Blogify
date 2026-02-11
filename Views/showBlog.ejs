@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./partials/head') %>
+        <title>Show Blog</title>
+</head>
+
+<body>
+    <%- include('./partials/navbar') %>
+    
+    <div class="container mt-4">
+        <article class="blog-post">
+            <!-- Cover Image -->
+            <div class="blog-cover mb-4">
+                <img src="<%= blog.coverImage %>" class="img-fluid w-100 rounded shadow" alt="<%= blog.title %>" style="max-height: 350px; object-fit: cover;">
+            </div>
+
+            <!-- Blog Header -->
+            <div class="blog-header mb-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h1 class="display-4 fw-bold"><%= blog.title %></h1>
+                    <% if (user && blog.createdBy && user._id.toString() === blog.createdBy._id.toString()) { %>
+                        <a href="/blog/<%= blog._id %>/edit" class="btn btn-warning">
+                            <i class="bi bi-pencil-square"></i> Edit Blog
+                        </a>
+                    <% } %>
+                </div>
+                
+                <div class="d-flex align-items-center text-muted mb-3">
+                    <div class="me-4">
+                        <i class="bi bi-person-circle"></i>
+                        <strong>By <%= blog.createdBy ? blog.createdBy.fullname : 'Unknown' %></strong>
+                    </div>
+                    <div>
+                        <i class="bi bi-calendar"></i>
+                        <%= new Date(blog.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+            </div>
+
+            <!-- Blog Content -->
+            <div class="blog-content mb-5">
+                <pre style="
+  white-space: pre-wrap;
+  font-family: inherit;
+  line-height: 1.8;
+  font-size: 16px;
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+">
+<%= blog.content %>
+</pre>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section mt-5">
+                <hr class="my-4">
+                
+                <!-- Comment Toggle Button -->
+                <button class="btn btn-primary mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#commentsCollapse" aria-expanded="false" aria-controls="commentsCollapse">
+                    <i class="bi bi-chat-dots"></i> View Comments (<%= comments.length %>)
+                </button>
+
+                <!-- Collapsible Comments -->
+                <div class="collapse" id="commentsCollapse">
+                    
+                    <!-- Display Comments -->
+                    <div class="mb-4">
+                        <h5 class="mb-3">Comments</h5>
+                        <% if (comments.length > 0) { %>
+                            <% comments.forEach(comment => { %>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-start">
+                                            <!-- Profile Image -->
+                                            <div class="me-3">
+                                                <img src="<%= comment.createdBy ? (comment.createdBy.gender === 'female' ? '/images/female-avtar.svg' : '/images/male-avatar.svg') : '/images/male-avatar.svg' %>" 
+                                                     alt="Profile" 
+                                                     class="rounded-circle" 
+                                                     style="width: 40px; height: 40px; object-fit: cover;">
+                                            </div>
+                                            
+                                            <!-- Comment Content -->
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start">
+                                                    <div>
+                                                        <h6 class="mb-1">
+                                                            <a href="/user/profile/<%= comment.createdBy._id %>" class="text-decoration-none text-dark fw-bold">
+                                                                <%= comment.createdBy ? comment.createdBy.fullname : 'Unknown' %>
+                                                            </a>
+                                                        </h6>
+                                                    </div>
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        <small class="text-muted">
+                                                            <%= new Date(comment.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) %>
+                                                        </small>
+                                                        <% if (user && comment.createdBy && user._id.toString() === comment.createdBy._id.toString()) { %>
+                                                            <button type="button" class="btn btn-link text-primary p-0 ms-2" title="Edit comment" style="border: none; background: none; font-size: 16px;" onclick="toggleEditComment('<%= comment._id %>')">
+                                                                <i class="bi bi-pencil"></i>
+                                                            </button>
+                                                            <form action="/blog/<%= blog._id %>/comment/<%= comment._id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this comment?');">
+                                                                <button type="submit" class="btn btn-link text-danger p-0 ms-1" title="Delete comment" style="border: none; background: none; font-size: 18px;">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                                <!-- Display Comment -->
+                                                <p class="card-text mb-0 mt-2" id="comment-text-<%= comment._id %>"><%= comment.content %></p>
+                                                
+                                                <!-- Edit Comment Form (Hidden by default) -->
+                                                <% if (user && comment.createdBy && user._id.toString() === comment.createdBy._id.toString()) { %>
+                                                <form action="/blog/<%= blog._id %>/comment/<%= comment._id %>/edit" method="POST" id="edit-form-<%= comment._id %>" style="display: none;" class="mt-2">
+                                                    <textarea name="comment" class="form-control mb-2" rows="3" required><%= comment.content %></textarea>
+                                                    <div class="d-flex gap-2">
+                                                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
+                                                        <button type="button" class="btn btn-sm btn-secondary" onclick="toggleEditComment('<%= comment._id %>')">Cancel</button>
+                                                    </div>
+                                                </form>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <p class="text-muted">No comments yet. Be the first to comment!</p>
+                        <% } %>
+                    </div>
+
+                    <!-- Add Comment Form -->
+                    <div class="add-comment">
+                        <h5 class="mb-3">Add a Comment</h5>
+                        <form action="/blog/<%= blog._id %>/comment" method="POST" id="commentForm">
+                            <div class="mb-3">
+                                <textarea class="form-control" name="comment" rows="3" placeholder="Write your comment here..." required></textarea>
+                            </div>
+                            <% if (!user) { %>
+                                <a href="/user/signin" class="btn btn-primary" 
+                                   data-bs-toggle="popover" 
+                                   data-bs-placement="top"
+                                   data-bs-trigger="hover"
+                                   data-bs-title="Login Required" 
+                                   data-bs-content="Click to sign in and post your comment">
+                                    Post Comment
+                                </a>
+                            <% } else { %>
+                                <button type="submit" class="btn btn-primary">Post Comment</button>
+                            <% } %>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    <%- include('./partials/script') %>
+    
+    <script>
+        // Initialize Bootstrap popovers
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+        
+        // Toggle edit comment form
+        function toggleEditComment(commentId) {
+            const commentText = document.getElementById('comment-text-' + commentId);
+            const editForm = document.getElementById('edit-form-' + commentId);
+            
+            if (editForm.style.display === 'none') {
+                commentText.style.display = 'none';
+                editForm.style.display = 'block';
+            } else {
+                commentText.style.display = 'block';
+                editForm.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>

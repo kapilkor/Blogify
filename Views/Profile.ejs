@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <%- include('./partials/head') %>
+        <title>Profile</title>
+</head>
+
+<body>
+    <%- include('./partials/navbar') %>
+
+
+        <section class="h-100 gradient-custom-2">
+            <div class="container py-5 h-100">
+                <div class="row d-flex justify-content-center">
+                    <div class="col col-lg-9 col-xl-8">
+                        <div class="card">
+
+                            <!-- Header -->
+                            <div class="rounded-top text-white d-flex flex-row"
+                                style="background-color: #000; height:200px;">
+                                <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                                    <img src="<%= user.gender === 'female' ? '/images/female-avtar.svg' : '/images/male-avatar.svg' %>"
+                                        alt="Profile Image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                        style="width: 150px; z-index: 1">
+
+                                    <% if (currentUser && currentUser._id.toString() === user._id.toString()) { %>
+                                    <a href="/user/profile/edit" class="btn btn-outline-light btn-sm" style="z-index: 1;">
+                                        Edit Profile
+                                    </a>
+                                    <% } %>
+                                </div>
+
+                                <div class="ms-3" style="margin-top: 130px;">
+                                    <h5><%= user.fullname %></h5>
+                                    <p class="mb-0"><%= user.email %></p>
+                                </div>
+                            </div>
+
+                            <!-- Stats -->
+                            <div class="p-4 text-black bg-body-tertiary">
+                                <div class="d-flex justify-content-end text-center py-1 text-body">
+                                    <div>
+                                        <p class="mb-1 h5"><%= blogs.length %></p>
+                                        <p class="small text-muted mb-0">Blogs</p>
+                                    </div>
+                                    <div class="px-3">
+                                        <p class="mb-1 h5"><%= comments.length %></p>
+                                        <p class="small text-muted mb-0">Comments</p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-1 h5"><%= user.role === 'admin' ? 'Admin' : 'User' %></p>
+                                        <p class="small text-muted mb-0">Role</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- About Section -->
+                            <div class="card-body p-4 text-black">
+                                <div class="mb-4">
+                                    <p class="lead fw-normal mb-1">About</p>
+                                    <div class="p-4 bg-body-tertiary rounded">
+                                        <p class="mb-1"><strong>Full Name:</strong> <%= user.fullname %></p>
+                                        <p class="mb-1"><strong>Email:</strong> <%= user.email %></p>
+                                        <p class="mb-1"><strong>Member Since:</strong> <%= new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                                        <p class="mb-0"><strong>Total Blogs:</strong> <%= blogs.length %> | <strong>Total Comments:</strong> <%= comments.length %></p>
+                                    </div>
+                                </div>
+
+                                <!-- Optional Section -->
+                                <div class="text-center text-muted">
+                                    <p class="mb-0">Sharing knowledge through blogs 🚀</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <%- include('./partials/script') %>
+</body>
+
+</html>
