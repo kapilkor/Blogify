@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));  // file handling
 app.use(express.json());
 app.use(checkForAuthentication("token"));
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'Views'));
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
